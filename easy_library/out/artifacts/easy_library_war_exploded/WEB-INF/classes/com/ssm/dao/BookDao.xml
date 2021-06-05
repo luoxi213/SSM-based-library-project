@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssm.dao.BookDao">
+    <insert id="addBook" keyProperty="bookid">
+        insert into
+        <choose>
+            <when test="detail!=null and detail!=''">
+                books (bookname, bookcount, detail) value (#{bookname}, #{bookcount}, #{detail})
+            </when>
+            <otherwise>
+                books (bookname, bookcount) value (#{bookname}, #{bookcount})
+            </otherwise>
+        </choose>
+    </insert>
+    <update id="updateBook" flushCache="true">
+        update books
+        <set>
+            <if test="bookname!=null and bookname!=''">
+                bookname = #{bookname},
+            </if>
+            <if test="bookcount!=null and bookcount!=''">
+                bookcount = #{bookcount},
+            </if>
+            <if test="detail!=null and detail!=''">
+                detail = #{detail},
+            </if>
+        </set>
+        where bookid = #{bookid}
+    </update>
+    <update id="borrowBook">
+        update books
+        set bookcount = bookcount - 1
+        where bookid = #{bookid}
+    </update>
+    <update id="returnBook">
+        update books
+        set bookcount = bookcount + 1
+        where bookid = #{bookid}
+    </update>
+    <delete id="delBook" flushCache="true">
+        delete
+        from books
+        where bookid = #{bookid}
+    </delete>
+    <select id="listBooks" resultType="com.ssm.pojo.Bookxx">
+        select *
+        from books
+    </select>
+
+    <select id="findBookByName" resultType="com.ssm.pojo.Bookxx">
+        select *
+        from books
+        where bookname = #{bookname}
+    </select>
+</mapper>

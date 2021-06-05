@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssm.dao.UserAndBookDao">
+
+    <insert id="borrowBook">
+        insert into
+        borrow (bookid, userid)
+        values (#{bookid}, #{userid})
+    </insert>
+    <delete id="retuenBook">
+        delete from
+        borrow
+        where bookid = #{bookid} and userid = #{userid}
+    </delete>
+    <select id="checkIfBorrow" resultType="java.lang.Integer">
+        select id
+        from borrow
+        where kooid = #{bookid} and userid = #{userid}
+    </select>
+</mapper>

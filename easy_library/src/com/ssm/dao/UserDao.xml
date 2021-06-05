@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssm.dao.UserDao">
+    <!-- 一对多结果映射 -->
+    <resultMap type="user" id="userMap">
+        <id column="userid" property="userid"/>
+        <result column="username" property="username"/>
+        <result column="account" property="account"/>
+        <result column="password" property="password" />
+        <result column="permission" property="permission" />
+        <collection property="books" ofType="bookxx">
+            <id column="bookid" property="bookid"/>
+            <result column="bookname" property="bookname"/>
+            <result column="detail" property="detail"/>
+        </collection>
+    </resultMap>
+
+
+    <insert id="addUser" keyProperty="userid">
+        insert into
+        user (username, account, password, permission)
+        value (#{user.username}, #{user.account}, #{user.password}, #{user.permission})
+    </insert>
+    <select id="findUserByAccount" resultType="com.ssm.pojo.User">
+        select *
+        from user
+        where account = #{account}
+    </select>
+    <select id="findUserByUid" resultType="com.ssm.pojo.User">
+        select *
+        from user
+        where userid = #{userid}
+    </select>
+    <select id="getUser" resultType="com.ssm.pojo.User">
+        select *
+        from user
+        where account = #{account} and password = #{password}
+    </select>
+    <select id="listBooksByUserid" resultMap="userMap">
+        select user.*, books.*
+        from user, books, borrow
+        where user.userid = #{userid}
+        and borrow.userid = user.userid
+        and borrow.bookid = books.bookid
+    </select>
+</mapper>
